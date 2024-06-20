@@ -1,19 +1,34 @@
 import React from 'react'
 
-export default function LHLCategory({ renderLHLCategories, onAddNew }) {
+export default function LHLCategory({ renderLHLCategories, onAddNew, onLhlDelete, onLhlEdit }) {
     console.log("renderLHLCategories: ", renderLHLCategories);
-    let lhlCategoriesElement = renderLHLCategories.map((lHlCategory,index)=>{
-        return(
+    let lhlCategoriesElement = renderLHLCategories.map((lHlCategory, index) => {
+        return (
             <tr key={index}>
                 <th>{index + 1}</th>
                 <td>{lHlCategory.lhlId}</td>
                 <td>{lHlCategory.lhlCategoryName}</td>
-                <td>{lHlCategory.lhlCategoryStatus===true?"Hiển Thị":"Tạm Khóa"}</td>
+                <td>{lHlCategory.lhlCategoryStatus === true ? "Hiển Thị" : "Tạm Khóa"}</td>
+                <td>
+                    <button className='btn btn-danger' onClick={() => lhlhandleDelete(lHlCategory.lhlId)}>Delete</button>
+                    <button className='btn btn-success' onClick={() => lhlhandleEdit(lHlCategory)}>Edit</button>
+                </td>
             </tr>
         )
     })
+    const lhlhandleDelete = (lhlId) => {
+        if (window.confirm('Bạn Có Muốn Xóa ['+lhlId+'] Không?')) {
+            console.log("Delete:", lhlId);
+            onLhlDelete(lhlId);
+        } else {
 
-    const lhlHandleAdd = ()=>{
+        }
+    }
+    const lhlhandleEdit = (lHlCategory)=>{
+        onLhlEdit(lHlCategory);
+    }
+
+    const lhlHandleAdd = () => {
         onAddNew(true);
     }
     return (

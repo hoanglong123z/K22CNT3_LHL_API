@@ -1,23 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from "../API/LHLAPI";
 
-export default function LHLCategoryForm({ oncloseForm, onCategorySubmit }) {
+export default function LHLCategoryForm({ oncloseForm, onCategorySubmit, renderLHLCategory }) {
     //state 
+    const [lhlId, setLhlId] = useState(0);
     const [lhlCategoryName, setLhlCategoryName] = useState("");
     const [lhlCategoryStatus, setLhlCategoryStatus] = useState(true);
+
+    useEffect(() => {
+        setLhlId(renderLHLCategory.lhlId);
+        setLhlCategoryName(renderLHLCategory.lhlCategoryName);
+        setLhlId(renderLHLCategory.lhlCategoryStatus);
+    });
     const lhlHandleClose = () => {
         oncloseForm(false);
     }
-    const lhlHandleSubmit = async (event)=>{
+    const lhlHandleSubmit = async (event) => {
         event.preventDefault();
-        let lhlCategory = {
-            lhlId:0,
-            lhlCategoryName:lhlCategoryName,
-            lhlCategoryStatus:lhlCategoryStatus
+        if (lhlId === 0) { //thêm
+            let lhlCategory = {
+                lhlId: 0,
+                lhlCategoryName: lhlCategoryName,
+                lhlCategoryStatus: lhlCategoryStatus
+            }
+            await axios.post("LhlCategory", lhlCategory);
+            onCategorySubmit(lhlCategory);
+        } else {//sửa
+            let lhlCategory = {
+                lhlId: lhlId,
+                lhlCategoryName: lhlCategoryName,
+                lhlCategoryStatus: lhlCategoryStatus
+            }
+            await axios.put("LhlCategory", lhlCategory);
+            onCategorySubmit(lhlCategory);
         }
-        console.log("lhlCateogry",lhlCategory);
-        await axios.post("LhlCategory",lhlCategory);
-        onCategorySubmit(lhlCategory);
     }
     return (
         <div>
@@ -41,7 +57,7 @@ export default function LHLCategoryForm({ oncloseForm, onCategorySubmit }) {
                     </select>
                 </div>
                 <button className='btn btn-success' onClick={lhlHandleSubmit}>Ghi Lại</button>
-                <button className='btn btn-success' onClick={lhlHandleClose}>Đóng</button>
+                <button className='btn btn-danger' onClick={lhlHandleClose}>Đóng</button>
             </form>
         </div>
     )

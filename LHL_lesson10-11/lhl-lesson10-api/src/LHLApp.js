@@ -25,7 +25,13 @@ function LHLApp() {
 
   //trạng thái form
   const [lhlCategoryIsForm, setLhlCategoryIsForm] = useState(false);
-
+  //dữ liệu form : Add/Edit
+  let lhlCategoryInit = {
+    lhlId: 0,
+    lhlCategoryName: "",
+    lhlCategoryStatus: true,
+}
+  const [lhlCategoryEdit, setLhlCategoryEdit] = useState(lhlCategoryInit);
   const lhlHandleAddNew = (param) => {
     setLhlCategoryIsForm(param);
   }
@@ -42,15 +48,32 @@ function LHLApp() {
     })
     setLhlCategoryIsForm(false);
   }
+  //hàm xử lý sự kiện xóa
+  const lhlhandleDelete = (lhlId)=>{
+    console.log("App-Delete-lhlId:",lhlId);
+    // const lhlResponse = axios.delete(`https://666c2e2e49dbc5d7145cfd4f.mockapi.io/lhlapi/lhlv1/LhlCategory/${lhlId}`);
+    const lhlResponse = axios.delete(`LhlCategory/${lhlId}`);
+    console.log("lhlResponse-Delete",lhlResponse);
+    let lhldelete = lhlCategories.filter(x=>x.lhlId !== lhlId);
+    setLhlCategories(lhldelete);
+    console.log("Deleted:",lhldelete);
+  }
+  const lhlhandleEdit =(lhlCategory)=>{
+    setLhlCategoryEdit(lhlCategory);
+    setLhlCategoryIsForm(true);
+  }
   return (
     <div className="container border my-3">
       <h1>Lê Hoàng Long - Call API</h1>
 
       <LHLCategory renderLHLCategories={lhlCategories}
-        onAddNew={lhlHandleAddNew} />
+        onAddNew={lhlHandleAddNew}
+        onLhlDelete={lhlhandleDelete} 
+        onLhlEdit={lhlhandleEdit}/>
       <hr />
       {
         lhlCategoryIsForm === true ? <LHLCategoryForm
+          renderLHLCategory = {lhlCategoryEdit}
           oncloseForm={lhlHandleCategoryCloseForm}
           onCategorySubmit={lhlHandleCategorySubmit} /> : ""
       }
