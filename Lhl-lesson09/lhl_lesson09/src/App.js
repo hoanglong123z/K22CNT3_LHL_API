@@ -7,7 +7,7 @@ function App() {
   const [lhlStudentList, setLHLStudentList] = useState([]);
   const LhlGetStudent = async () => {
     try {
-      const response = await axios.get("https://666a5c607013419182cefc68.mockapi.io/api/lhlv1/lhlStudent");
+      const response = await axios.get("https://666c2e2e49dbc5d7145cfd4f.mockapi.io/lhlapi/lhlv1/LhlProduct");
       setLHLStudentList(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -17,8 +17,8 @@ function App() {
     LhlGetStudent();
   }, []);
   return (
-    <div className='container border mt-5 p-3'>
-      <h1 className='text-center my-3'>Xử Lý chức năng CRUD - HOOK - API</h1>
+    <div className='container border my-3'>
+      <h1 className='text-center my-3'>Làm Việc Với API</h1>
       <hr />
       <LHLStudentList renderLHLStudentList = {lhlStudentList}/>
     </div>
